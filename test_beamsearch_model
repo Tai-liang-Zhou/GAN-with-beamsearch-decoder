@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 20 11:12:54 2018
+
+@author: tom
+"""
+ge_model = Generator(hps_generator, vocab)
+batchers = batcher.get_batches(mode='train')
+current_batch = batchers[1]
+sess_ge, saver_ge, train_dir_ge = setup_training_generator(ge_model)
+generated = Generated_sample(model, vocab, batcher, sess_ge)
+with generator_graph.as_default():
+    util.load_ckpt(saver_ge, sess_ge, ckpt_dir="train-generator")
+    print("finish load train-generator")
+
+
+ge_model = Generator(hps_generator, vocab)
+sess_ge, saver_ge, train_dir_ge = setup_training_generator(ge_model)
+util.load_ckpt(saver_ge, sess_ge, ckpt_dir="train-generator")
+print("finish load train-generator")
+batchers = batcher.get_batches(mode='train')
+current_batch = batchers[1]
+results = ge_model.sample_generator(sess_ge, current_batch)
